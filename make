@@ -1,31 +1,99 @@
 #!/usr/bin/env php
 <?php
+$src = 'src';
+$index = 'index.php';
 
 if(empty($argv[1])) {
     echo "\n";
     display('Missing phar name.', 'red_label');
     display(help(), 'black_label');
-    exit();
+    exit;
 } else {
     $pharName = $argv[1];
 }
 
-function make() {
-    
+if ($argv[1] === 'help') {
+    echo "\n";
+    display(help(), 'black_label');
+    exit;
+}
+
+if (!empty($argv[2])) {
+    $src = $argv[2];
+}
+
+if (!empty($argv[3])) {
+    $index = $argv[3];
+}
+
+make($pharName, $src, $index);
+
+/**
+ * @param string $pharName
+ * @param string $src
+ * @param string $index
+ */
+function make($pharName, $src, $index) {
+    $src .= DIRECTORY_SEPARATOR;
+
+    echo "\n";
+    display('Build process started.', 'green');
+    display('Package name: ' . $pharName);
+    display('Package name: ' . $src);
+    display('Package name: ' . $index);
+
+    if(!file_exists($src)) {
+        display('Directory ' . $src . ' don\'t exists.', 'red_label');
+        exit;
+    }
+
+    if(!file_exists($src . $index)) {
+        display('Main script file ' . $src . $index . ' don\'t exists.', 'red_label');
+        exit;
+    }
+
+    try {
+        display('Create PHAR.', 'green');
+        $phar = new Phar($pharName, 0, $pharName);
+        $phar->startBuffering();
+        $phar->buildFromDirectory($src);
+        display('PHAR created.', 'green');
+
+        $defaultStub = $phar->createDefaultStub($index);
+
+        $stub = "#!/usr/bin/env php \n". $defaultStub;
+
+        $phar->setStub($stub);
+        $phar->stopBuffering();
+
+        echo "\n";
+        display('BUILD SUCCESS', 'green_label');
+    } catch (Exception $e) {
+        display(message('ERROR: ', 'red_label') . message($e->getMessage(), 'red'));
+        display('BUILD FAIL', 'red_label');
+        exit;
+    }
 }
 
 function install() {
     
 }
 
-function error() {
-
+function currentTime() {
+    
 }
 
+/**
+ * @param string $message
+ * @param string $color
+ */
 function display($message, $color = '') {
     echo message($message, $color) . PHP_EOL;
 }
 
+/**
+ * @return string
+ */
 function help() {
     return <<<USAGE
 
@@ -37,8 +105,8 @@ Usage:  ./make [options]
     ./make phar_name [directory] [index_name]   All optionsThis help
 
     phar_name - name of output phar file
-    directory - (optional) source directory, default ./src
-    index_name - (optional) name of file that execute phar, default ./src/index.php
+    directory - (optional) source directory without separator, default ./src
+    index_name - (optional) name of file that execute phar without separator, default ./src/index.php
 
 ------------------------------
 
