@@ -1,5 +1,8 @@
 #!/usr/bin/env php
 <?php
+
+namespace MakePhar;
+
 $src = 'src';
 $index = 'index.php';
 
@@ -54,7 +57,7 @@ function make($pharName, $src, $index) {
 
     try {
         display('Create PHAR.', 'green');
-        $phar = new Phar($pharName, 0, $pharName);
+        $phar = new \Phar($pharName, 0, $pharName);
         $phar->startBuffering();
         $phar->buildFromDirectory($src);
         display('PHAR created.', 'green');
@@ -68,7 +71,7 @@ function make($pharName, $src, $index) {
 
         echo "\n";
         display('BUILD SUCCESS', 'green_label');
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
         display(message('ERROR: ', 'red_label') . message($e->getMessage(), 'red'));
         display('BUILD FAIL', 'red_label');
         exit;
@@ -80,7 +83,7 @@ function install() {
 }
 
 function currentTime() {
-    
+    return date('H:i:s');
 }
 
 /**
