@@ -1,0 +1,11 @@
+{
+    "name": "bluetree-service/phar_builder",
+    "description": "phar maker, phar builder, php phar",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Michał Adamiak",
+            "email": "chajr@bluetree.pl"
+        }
+    ]
+}
