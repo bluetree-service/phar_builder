@@ -6,10 +6,12 @@ namespace MakePhar;
 $src = 'src';
 $index = 'index.php';
 
-if(empty($argv[1])) {
+if (empty($argv[1])) {
     echo "\n";
+
     display('Missing phar name.', 'red_label');
     display(help(), 'black_label');
+
     exit;
 } else {
     $pharName = $argv[1];
@@ -17,7 +19,9 @@ if(empty($argv[1])) {
 
 if ($argv[1] === 'help') {
     echo "\n";
+
     display(help(), 'black_label');
+
     exit;
 }
 
@@ -40,6 +44,7 @@ function make($pharName, $src, $index) {
     $src .= DIRECTORY_SEPARATOR;
 
     echo "\n";
+
     display('Build process started.', 'green');
     display('Package name: ' . $pharName);
     display('Package name: ' . $src);
@@ -79,7 +84,7 @@ function make($pharName, $src, $index) {
 }
 
 function install() {
-    
+    //move to execution directory
 }
 
 function currentTime() {
@@ -105,7 +110,7 @@ function help() {
 Usage:  ./make [options]
 
     ./make help                                 This help
-    ./make phar_name [directory] [index_name]   All optionsThis help
+    ./make phar_name [directory] [index_name]   Create PHAR file
 
     phar_name - name of output phar file
     directory - (optional) source directory without separator, default ./src
