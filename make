@@ -13,9 +13,9 @@ if (empty($argv[1])) {
     display(help(), 'black_label');
 
     exit;
-} else {
-    $pharName = $argv[1];
 }
+
+$pharName = $argv[1];
 
 if ($argv[1] === 'help') {
     echo "\n";
@@ -40,7 +40,8 @@ make($pharName, $src, $index);
  * @param string $src
  * @param string $index
  */
-function make($pharName, $src, $index) {
+function make($pharName, $src, $index)
+{
     $src .= DIRECTORY_SEPARATOR;
 
     echo "\n";
@@ -50,12 +51,12 @@ function make($pharName, $src, $index) {
     display('Package name: ' . $src);
     display('Package name: ' . $index);
 
-    if(!file_exists($src)) {
+    if (!file_exists($src)) {
         display('Directory ' . $src . ' don\'t exists.', 'red_label');
         exit;
     }
 
-    if(!file_exists($src . $index)) {
+    if (!file_exists($src . $index)) {
         display('Main script file ' . $src . $index . ' don\'t exists.', 'red_label');
         exit;
     }
@@ -67,7 +68,7 @@ function make($pharName, $src, $index) {
         $phar->buildFromDirectory($src);
         display('PHAR created.', 'green');
 
-        $defaultStub = $phar->createDefaultStub($index);
+        $defaultStub = $phar::createDefaultStub($index);
 
         $stub = "#!/usr/bin/env php \n". $defaultStub;
 
@@ -83,11 +84,13 @@ function make($pharName, $src, $index) {
     }
 }
 
-function install() {
+function install()
+{
     //move to execution directory
 }
 
-function currentTime() {
+function currentTime()
+{
     return date('H:i:s');
 }
 
@@ -95,14 +98,16 @@ function currentTime() {
  * @param string $message
  * @param string $color
  */
-function display($message, $color = '') {
+function display($message, $color = '')
+{
     echo message($message, $color) . PHP_EOL;
 }
 
 /**
  * @return string
  */
-function help() {
+function help()
+{
     return <<<USAGE
 
 ------------------------------
@@ -126,7 +131,8 @@ USAGE;
  * @param string $color
  * @return string
  */
-function message($message, $color) {
+function message($message, $color)
+{
     $colors = colors($color);
     return $colors['start'] . $message . $colors['end'];
 }
@@ -135,7 +141,8 @@ function message($message, $color) {
  * @param string $type
  * @return array
  */
-function colors($type) {
+function colors($type)
+{
     $list = [
         'start' => '',
         'end'   => "\033[0m"
